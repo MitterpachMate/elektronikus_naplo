@@ -12,7 +12,7 @@ namespace elektronikus_naplo
     public class ProductController : ControllerBase
     {
         Connect connect = new();
-        private readonly List<ElektronikusNaploDtos> tanulok = new();
+        private readonly List<ElektronikusNaploDtos.TanuloDto> tanulok = new();
 
 
         [HttpGet]
@@ -38,7 +38,7 @@ namespace elektronikus_naplo
                         reader.GetDateTime("Letrehozas")
                         );
 
-                    //tanulok.Add(tanulolista); //CS1503 hiba
+                    tanulok.Add(tanulolista);
                 }
                 connect.connection.Close();
 
