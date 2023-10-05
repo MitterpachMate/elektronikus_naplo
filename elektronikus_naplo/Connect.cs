@@ -13,10 +13,10 @@ namespace elektronikus_naplo
 
         public Connect()
         {
-            Host = "127.0.0.1";
+            Host = "localhost";
             DbName = "db_elektronikus_naplo";
             UserName = "root";
-            Password = "password";
+            Password = "";
 
             //ConnectionString = "Host="+Host+";Database="+DbName+";User="+UserName+";Password="+Password+";SslMode=none";
 
