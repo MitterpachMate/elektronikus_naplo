@@ -1,14 +1,61 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using elektronikus_naplo;
+using elektronikus_naplo.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
-using elektronikus_naplo.Models;
 using static elektronikus_naplo.ElektronikusNaploDtos;
 
-namespace elektronikus_naplo.Controllers
+namespace ProductApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("tanulok")]
     [ApiController]
-    public class ELektronikusNaploController : ControllerBase
+    public class ProductController : ControllerBase
     {
+        Connect connect = new();
+        private readonly List<ElektronikusNaploDtos> tanulok = new();
+
+        [HttpPost]
+        public ActionResult<Tanulo> Post(JegyHozzaad hozzaadJegy)
+        {
+            //DateTime dateTime = DateTime.Now;
+            //string Time = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+            var tanulo = new Tanulo
+            {
+                Azon = Guid.NewGuid(),
+                Jegy = hozzaadJegy.Jegy,
+                Leiras = hozzaadJegy.Leiras,
+                Letrehozas = DateTimeOffset.Now
+            };
+
+            try
+            {
+                connect.connection.Open();
+
+                string sql = $"INSERT INTO `tanulok`(`Azon`, `Jegy`, `Leiras`, `Letrehozas`) VALUES (@Azon, @Jegy,@Leiras,@Letrehozas)";
+
+
+                MySqlCommand cmd = new MySqlCommand(sql, connect.connection);
+
+                cmd.Parameters.AddWithValue("Azon", tanulo.Azon);
+                cmd.Parameters.AddWithValue("Jegy", tanulo.Jegy);
+                cmd.Parameters.AddWithValue("Leiras", tanulo.Leiras);
+                cmd.Parameters.AddWithValue("Letrehozas", tanulo.Letrehozas);
+
+                cmd.ExecuteNonQuery();
+
+                connect.connection.Close();
+
+                return StatusCode(201, tanulo);
+
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
     }
+
 }

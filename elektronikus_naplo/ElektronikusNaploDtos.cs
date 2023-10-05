@@ -1,18 +1,16 @@
-﻿namespace elektronikus_naplo
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace elektronikus_naplo
 {
     public class ElektronikusNaploDtos
     {
-        //Minden tanulot leker
-        public record LekerTanulok ( Guid Azon, int Jegy, string Leiras, DateTimeOffset Letrehozas );
+            //Minden Tanulo hozzaad
+            public record JegyHozzaad(Guid Azon, int Jegy, string Leiras, DateTimeOffset Letrehozas);
 
-        //Letrehoz egy tanulot
-        public record LetrehozTanulo ( Guid Azon, int Jegy, string Leiras, DateTimeOffset Letrehozas );
-
-        //Modosit jegyet
-        public record ModositJegy (Guid Azon, int Jegy, string Leiras, DateTimeOffset Letrehozas);
-
-        //Jegy torles
-        public record TorolJegy(Guid Azon, int Jegy);
-
+            //Tanulo jegy modosit
+            public record JegyModosit(Guid Azon, [Range(1, 5)] int Jegy, string Leiras);
+            
+            //Tanulo jegy torol
+            public record JegyTorol(Guid Azon);
     }
 }
