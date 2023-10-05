@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using elektronikus_naplo.Models;
-using static elektronikus_naplo.ElektronikusNaplo;
+using static elektronikus_naplo.ElektronikusNaploDtos;
 
 namespace elektronikus_naplo.Controllers
 {
