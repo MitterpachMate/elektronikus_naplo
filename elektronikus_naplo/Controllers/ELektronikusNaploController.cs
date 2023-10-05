@@ -15,8 +15,6 @@ namespace elektronikus_naplo
         private readonly List<ElektronikusNaploDtos> tanulok = new();
 
 
-
-
         [HttpGet]
         public ActionResult<IEnumerable<ElektronikusNaploDtos>> Get()
         {
@@ -40,7 +38,7 @@ namespace elektronikus_naplo
                         reader.GetDateTime("Letrehozas")
                         );
 
-                    tanulok.Add(tanulolista);
+                    //tanulok.Add(tanulolista); //CS1503 hiba
                 }
                 connect.connection.Close();
 
@@ -55,6 +53,49 @@ namespace elektronikus_naplo
         }
 
 
+
+        [HttpGet("{id}")]
+        public ActionResult<ElektronikusNaploDtos> Get(Guid id)
+        {
+
+            try
+            {
+                connect.connection.Open();
+
+                string sql = "SELECT * FROM tanulok WHERE Id=@Azon";
+
+                MySqlCommand cmd = new MySqlCommand(sql, connect.connection);
+
+                cmd.Parameters.AddWithValue("Id", id);
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    var result = new TanuloDto(
+                        reader.GetGuid("Id"),
+                        reader.GetInt32("Jegy"),
+                        reader.GetString("Leiras"),
+                        reader.GetDateTime("Letrehozas")
+                        );
+
+                    connect.connection.Close();
+                    return StatusCode(200, result);
+                }
+                else
+                {
+                    Exception e = new();
+                    connect.connection.Close();
+                    return StatusCode(404, e.Message);
+                }
+
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
 
 
         //JegyHozzaad
